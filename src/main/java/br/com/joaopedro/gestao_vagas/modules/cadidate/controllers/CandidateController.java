@@ -3,6 +3,7 @@ package br.com.joaopedro.gestao_vagas.modules.cadidate.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.joaopedro.gestao_vagas.exceptions.UserFoundException;
 import br.com.joaopedro.gestao_vagas.modules.cadidate.CandidateEntity;
 import br.com.joaopedro.gestao_vagas.modules.cadidate.CandidateRepository;
 
@@ -20,6 +21,12 @@ public class CandidateController {
 
     @PostMapping("/")
     public CandidateEntity create( @Valid @RequestBody CandidateEntity candidateEntity) {
-       return this.candidateRepository.save(candidateEntity);
+        this.candidateRepository
+            .findByUsernameOrEmail(candidateEntity.getUsername(), candidateEntity.getEmail())
+            .ifPresent((user) -> {
+                throw new UserFoundException();
+            });
+
+        return this.candidateRepository.save(candidateEntity);
     }
 }
