@@ -1,5 +1,8 @@
 package br.com.joaopedro.gestao_vagas.modules.company.useCases;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,6 +45,7 @@ public class AuthCompanyUseCase {
         // Se as credenciais forem válidas, gerar o token JWT
         Algorithm algorithm = Algorithm.HMAC256(secretKey);  // Usar o valor correto da chave secreta
         var token = JWT.create()
+            .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
             .withIssuer("javagas")
             .withSubject(company.getId().toString())
             .sign(algorithm);
