@@ -29,5 +29,4 @@ public class AuthCandidateController {
 
         }
     }
-        // Implementar a autenticação do candidato
 }
