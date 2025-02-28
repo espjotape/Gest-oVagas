@@ -34,6 +34,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/candidate")
+@Tag(name = "Candidato", description = "Informações do Candidato")
 public class CandidateController {
 
     @Autowired
@@ -43,6 +44,12 @@ public class CandidateController {
     private CreateCandidateUseCase createCandidateUseCase;
 
     @PostMapping("/")
+    @Operation(summary = "Cadastro de candidato", description = "Essa função é responsável por cadastrar um candidado")
+    @ApiResponse(responseCode = "200", content = {
+        @Content(schema = @Schema(implementation = CandidateEntity.class))
+    })
+    @ApiResponse(responseCode = "400", description = "Usuário já existe")
+    @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<Object> create( @Valid @RequestBody CandidateEntity candidateEntity) {
         try {
            var result = this.createCandidateUseCase.execute(candidateEntity);
@@ -57,7 +64,6 @@ public class CandidateController {
 
     @GetMapping("/")
     @PreAuthorize("hasRole('CANDIDATE')")
-    @Tag(name = "Candidato", description = "Informações do Candidato")
     @Operation(summary = "Perfil do candidado", description = "Essa função é responsável por buscar as informações do candidato.")
     @ApiResponse(responseCode = "200", content = {
         @Content(schema = @Schema(implementation = ProfileCandidateResponseDTO.class))
@@ -77,7 +83,6 @@ public class CandidateController {
 
     @GetMapping("/job")
     @PreAuthorize("hasRole('CANDIDATE')")
-    @Tag(name = "Candidato", description = "Informações do Candidato")
     @Operation(summary = "Listagem de vagas disponivel para o candidato", description = "Essa função é responsável por listar todas as vagas disponíveis, baseada no filtro.")
     @ApiResponse(responseCode = "200", content = {
         @Content(array = @ArraySchema(schema = @Schema(implementation = JobEntity.class)))
