@@ -4,10 +4,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.joaopedro.gestao_vagas.modules.cadidate.CandidateEntity;
 import br.com.joaopedro.gestao_vagas.modules.cadidate.useCase.CreateCandidateUseCase;
+import br.com.joaopedro.gestao_vagas.modules.cadidate.useCase.ListAllJobsByFilterUseCase;
 import br.com.joaopedro.gestao_vagas.modules.cadidate.useCase.ProfileCandidateUseCase;
+import br.com.joaopedro.gestao_vagas.modules.company.entities.JobEntity;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +44,9 @@ public class CandidateController {
         }
     }
 
+    @Autowired
+    private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
+
     @GetMapping("/")
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<Object> get(HttpServletRequest request) {
@@ -51,5 +58,11 @@ public class CandidateController {
         } catch (Exception e) {
         return ResponseEntity.badRequest().body(e.getMessage());
        }
+    }
+
+    @GetMapping("/job")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public List<JobEntity> findJobByFilter(@RequestParam String filter) {
+        return this.listAllJobsByFilterUseCase.execute(filter);
     }
 }
