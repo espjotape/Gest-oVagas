@@ -16,7 +16,7 @@ public class PrimeiroTeste {
  @Test
   public void validar_valor_incorreto(){
    var result = calculate(2, 3);
-   assertNotEquals(result, 45);
+   assertNotEquals(result, 5);
  }
 
  public static int calculate(int num1, int num2) {
