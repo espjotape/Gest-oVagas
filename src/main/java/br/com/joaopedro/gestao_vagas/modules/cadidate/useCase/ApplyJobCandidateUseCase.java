@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.joaopedro.gestao_vagas.modules.cadidate.CandidateRepository;
+import br.com.joaopedro.gestao_vagas.modules.cadidate.entity.ApplyJobEntity;
 import br.com.joaopedro.gestao_vagas.modules.cadidate.repository.ApplyJobRepository;
 import br.com.joaopedro.gestao_vagas.modules.company.repositories.JobRepository;
 import br.com.joaopedro.gestao_vagas.exceptions.UserNotFoundException;
@@ -24,7 +25,7 @@ public class ApplyJobCandidateUseCase {
  @Autowired
  private ApplyJobRepository applyJobRepository;
 
- public void execute(UUID idCandidate, UUID idJob) {
+ public ApplyJobEntity execute(UUID idCandidate, UUID idJob) {
   
   // Validar se o candidato existe
   this.candidateRepository.findById(idCandidate)
@@ -37,7 +38,14 @@ public class ApplyJobCandidateUseCase {
     .orElseThrow(() -> {
       throw new JobNotFoundException();
     });
+
+    // Candidatose inscrever na vaga
+    var applyJob = ApplyJobEntity.builder()
+    .candidateId(idCandidate)
+    .jobId(idJob).build();
+
+    applyJob = applyJobRepository.save(applyJob);
+    return applyJob;
  }
 
- // Candidatose inscrever na vaga
 }
