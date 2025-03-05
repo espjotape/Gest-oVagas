@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.joaopedro.gestao_vagas.modules.cadidate.CandidateEntity;
 import br.com.joaopedro.gestao_vagas.modules.cadidate.dto.ProfileCandidateResponseDTO;
+import br.com.joaopedro.gestao_vagas.modules.cadidate.useCase.ApplyJobCandidateUseCase;
 import br.com.joaopedro.gestao_vagas.modules.cadidate.useCase.CreateCandidateUseCase;
 import br.com.joaopedro.gestao_vagas.modules.cadidate.useCase.ListAllJobsByFilterUseCase;
 import br.com.joaopedro.gestao_vagas.modules.cadidate.useCase.ProfileCandidateUseCase;
@@ -42,6 +43,9 @@ public class CandidateController {
 
     @Autowired
     private CreateCandidateUseCase createCandidateUseCase;
+
+    @Autowired
+    private ApplyJobCandidateUseCase applyJobCandidateUseCase;
 
     @PostMapping("/")
     @Operation(summary = "Cadastro de candidato", description = "Essa função é responsável por cadastrar um candidado")
@@ -90,5 +94,22 @@ public class CandidateController {
     @SecurityRequirement(name = "jwt_auth")
     public List<JobEntity> findJobByFilter(@RequestParam String filter) {
         return this.listAllJobsByFilterUseCase.execute(filter);
+    }
+
+    @PostMapping("/job/apply")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    @Operation(summary = "Inscrição do candidato para uma vaga", description = "Essa função é responsável por realizar a inscrição do candidato em uma vaga.")
+    @ApiResponse(responseCode = "200", content = {
+        @Content(array = @ArraySchema(schema = @Schema(implementation = JobEntity.class)))
+    })
+    @SecurityRequirement(name = "jwt_auth")
+    public ResponseEntity<Object> applyJob(HttpServletRequest request, @RequestBody UUID idJob) {
+        var idCandidate = request.getAttribute("candidate_id");
+        try {
+            var result = this.applyJobCandidateUseCase.execute(UUID.fromString(idCandidate.toString()), idJob);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -12,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,11 +31,11 @@ public class ApplyJobEntity {
  private UUID id;
 
  @ManyToOne
- @Column(name = "candidate_id", insertable = false, updatable = false)
+ @JoinColumn(name = "candidate_id", insertable = false, updatable = false)
  private CandidateEntity candidateEntity;
 
  @ManyToOne
- @Column(name = "job_id", insertable = false, updatable = false)
+ @JoinColumn(name = "job_id", insertable = false, updatable = false)
  private JobEntity jobEntity;
  
  @Column(name = "candidate_id")
