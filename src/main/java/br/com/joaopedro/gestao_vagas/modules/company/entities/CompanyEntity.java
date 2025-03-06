@@ -13,10 +13,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "company")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CompanyEntity {
     
     @Id
@@ -35,6 +41,7 @@ public class CompanyEntity {
 
     private String website;
     private String name;
+    private String description;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
