@@ -19,7 +19,7 @@ FROM openjdk:17-jdk-slim
 EXPOSE 8080
 
 # Copia o JAR gerado na fase de build para a fase final do container  
-COPY --from=build /target/gestao_vagas-0.0.1.jar app.jar
+COPY --from=build /target/gestao_vagas-0.0.1-SNAPSHOT.jar app.jar
 
 # Define o comando que será executado ao iniciar o container  
 ENTRYPOINT [ "java", "-jar", "app.jar" ]
