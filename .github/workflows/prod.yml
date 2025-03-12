@@ -1,22 +1,19 @@
-# Nome do workflow, que aparecerá na aba "Actions" do GitHub
 name: Gestao de vagas Application
 
-# Define quando esse workflow será acionado
 on: 
-  push:  # Aciona o workflow quando houver um push
-    branches: [main]  # Somente quando o push for na branch "main"
+  push: 
+    branches: [main] 
 
-# Definição dos jobs (tarefas que serão executadas no workflow)
 jobs: 
-  build:  # Nome do job 
-    runs-on: ubuntu-latest  # Define que o job será executado em um ambiente Ubuntu atualizado
+  build:
+    runs-on: ubuntu-latest
 
-    steps:  # Lista de etapas a serem executadas dentro do job
-      - name: Checkout code  # Nome para a etapa
-        uses: actions/checkout@v3  # Ação oficial do GitHub que clona o repositório para o runner
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Setup Java  # Nome para a etapa
-        uses: actions/setup-java@v3  # Ação oficial para configurar o Java no runner
+      - name: Setup Java
+        uses: actions/setup-java@v3 
         with:
-          distribution: temurin  # Define a distribuição do Java como Temurin (Adoptium OpenJDK)
-          java-version: 17  # Define a versão do Java como 17
+          distribution: temurin
+          java-version: 17
